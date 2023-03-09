@@ -1,3 +1,12 @@
+---
+title: "Week2"
+author: "Sammy"
+date: '2023-03-08'
+output:
+  html_document: default
+  pdf_document: default
+---
+
 #启动RStudio会在后台默认读取一系列数据集，其中有一项数据集名叫rivers，它描述了北美141条主要河流的长度
 #1.	打印（print）这个数据集；
 ```{r}
@@ -21,19 +30,13 @@ print(min(rivers))
 
 #(2)外部包提供的描述性统计函数
 ```{r}
-install.packages('Hmisc')
-library(Hmisc)
-Hmisc::describe(rivers)
-rivers.Des1<-c(141.0,135.0,425.0,591.0,3710.0,493.9,243908.4)
-dataname<-c('Count','Min','Median','Mean','Max','Sd','Var')
-names(rivers.Des1) <-dataname
-rivers.Des1
+library(psych)
+describe(rivers)
 ```
 
 #3.计算结果构建成一个名为rivers.Des.1的向量中，打印该向量；
 ```{r}
-rivers.Des.1<-c(141.0,591,1844,425,493,8708,243908.4,3710,135)
-names(rivers.Des.1) <- c('count','missing','distinct','Info','Mean','Gmd','lowest','highest')
+rivers.Des.1 <- c(length(rivers), sd(rivers), summary(rivers))
 print(rivers.Des.1)
 ```
 
@@ -55,39 +58,40 @@ mode(women)
 
 #1.计算该数据集的行数与列数；
 ```{r}
-length(col(women))
-length(women)
+nrow(women)
+ncol(women)
 ```
 
 #2.打印该数据集的前6个观测，和最后6个观测；
 ```{r}
-for (i in 1:6){print(women[i,])}
-for (i in 10:15){print(women[i,])}
+head(women, 6)
+tail(women, 6)
 ```
 
 #3.计算height列的均值和方差；
 ```{r}
-mean(women[,1])#[1,] 第一行[,1]第一列
+mean(women[,1])#方法一[1,] 第一行[,1]第一列
+mean(women$height)#方法二
+sd(women$height)
 ```
 
 ```{r}
 #4.请选择height列的值大于60的行，形成一个新的数据集，名称为women.Height60；
 women.Height60<- subset(women,height > 60)
+women.Height60
 ```
 
 #5.将women数据集转化为一个列表类型的名叫women.list数据，要求列表中包含两个元素，分别是height和weight，
 ```{r}
-women.list[[1]]<- women[,1]#aa[[1]] 表示列表aa的第一个成分，而 aa[1] 则表示仅由aa的第一个成分组成的子列表
-women.list[[2]]<- women[,2]
-  #打印该列表；
-print(women.list)
+women.list <- list(height = women$height, weight = women$weight)
+women.list
 ```
 
 #6.将women数据集转化为一个矩阵类型的名叫women.matrix数据，打印该矩阵和该矩阵的转置矩阵；
 ```{r}
-women.matrix<-matrix(women,2,byrow=T)
-print(women.matrix)
-print(t(women.matrix))
+women.matrix <- as.matrix(women)
+women.matrix
+t(women.matrix)
 ```
 
 #7.请使用R自带的cor这一函数，计算women这一数据集height和weight列的相关系数；
@@ -100,5 +104,6 @@ cor(women)
 #Pearson, Spearman, Kendall 三类相关系数是统计学上的三大重要相关系数，表示两个变量之间变化的趋势方向和趋势程度。
 #Pearson相关适用于 正态分布 定距数据；Spearman相关适用于不明分布定距数据；Kendall相关适用于不明分布定序数据。
 ```
+
 
 
